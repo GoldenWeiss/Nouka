@@ -1,0 +1,138 @@
+class SceneMap
+	States = 
+	{
+		:play => 0,
+		:pause => 1
+	}
+	def init
+		@level  = Database::Levels[Global.current_level]
+		@mapID  = @level[0][0]
+		@code   = @level[1]
+		@map    = N::Map.new(Global.current_map)
+		@state  = States[:play]
+		Global.camera.rect.x = @level[0][1]+@map.rect.width/2*Global.camera.zoom
+		Global.camera.rect.y = @level[0][2]+@map.rect.height/2*Global.camera.zoom
+		@mouse = Input.mouse
+		@keyboard = Input.keyboard
+		@mouse.showDragRect
+		@windows = Hash.new
+		@windows[:msg]    = WindowMessage.new
+		@windows[:pause]  = WindowPause.new
+		@windows[:option] = WindowOptions.new
+		@windows[:action]  = WindowActions.new
+		
+		_plane_width = Database::Config::DefaultWidth
+		@windows[:p_border_up] = AnimatedPlane.new(0, 0, Database::Config::DefaultWidth, _plane_width, 2999, Window::BlankColor)
+	end
+	def update
+		@mouse.update
+		windows_update
+		@map.update
+		eval(@code)
+		
+		keyboard_event_update
+		
+		if @state == States[:play]
+			wheel_event_update
+			mouse_event_update
+		end	
+		
+		
+	end
+	
+	def draw
+		
+		windows_draw
+		@map.draw
+	end
+	
+	def wheel_event_update
+		_dir = @mouse.wheel
+		if _dir != 0
+			_rx, _ry = @mouse.relative_mouse_x, @mouse.relative_mouse_y
+			_newzoom = Global.camera.zoom + _dir
+			if _newzoom.between?(Database::Maps::MinZoomFactor, Database::Maps::MaxZoomFactor)
+				_ax, _ay = @mouse.absolute_mouse_x, @mouse.absolute_mouse_y
+				Global.camera.rect.moveC((_rx-_ax) * _newzoom / Global.camera.zoom, (_ry-_ay) * _newzoom / Global.camera.zoom)
+				Global.camera.zoom = _newzoom
+			end
+			@mouse.updateWheel
+		end
+	end
+	
+	def keyboard_event_update
+		_dir = @keyboard.coords8
+		_v = Database::Maps::MoveSpeed * Global.camera.zoom / Database::Config::ZoomFactor
+		Global.camera.rect.moveR(-_dir[0] * _v, -_dir[1] * _v)
+		Global.camera.rect.moveR(@mouse.vx * _v, @mouse.vy * _v)
+	end
+	
+	def mouse_event_update
+		if @mouse.triggered?
+		
+			if @mouse.dragged?
+				@mouse.showDragRect
+				@map.updateSelectedEntities
+			else
+				@mouse.hideDragRect
+				@map.updateSelectedEntities #if !@do_test_action 
+				#@do_test_action = false if @map.newSelectedEntities?
+			end
+		elsif @mouse.released?
+			@mouse.unrelease
+			if @map.selectedEntities? # Selected many entities
+				if @mouse.dragged?
+					@do_test_action = true
+				else
+					if @do_test_action
+						@map.selectedEntities.each {|e| e.moveTo(@mouse.x, @mouse.y)}
+						#@map.clearSelectedEntities
+						@do_test_action = false
+					end
+				end
+				open_window(:msg)
+				_e = @map.selectedEntities[0]
+				_text = "safezone"*20#Database::Entities::Classes[_e.type_id][_e.class_id][1] + " is coming for you.\nBe prepared.\nTestLineTestLineTestLineTestLineTestLineTestLineTestLineTestLineTestLine"
+				
+				@windows[:msg].set_text(_text)
+			else
+				# No interference, continue action
+				#_e = Entity.new(-1, 0, 1, rand(3), @mouse.x, @mouse.y)#Ratio.map_convx(@mouse.x), Ratio.map_convy(@mouse.y))
+				#@map.addEntity(_e)
+				#cash("\nSpawned Entity x='V'=x")#Global.tilesets[0].data[]
+				close_window(:msg)
+			end
+		end
+	end
+	
+	
+	def windows_update;@windows.each{|k,i|i.update};end
+	def windows_draw;@windows.each{|k,i|i.draw};end
+	def get_window(w);@windows[w];end
+	
+	def close_window(wnd)
+		@windows[wnd].close
+	end
+	def open_window(wnd)
+		@windows[wnd].open
+	end
+	
+	def pause
+		$mouse.release
+		$mouse.unrelease
+		
+		if @state == States[:pause]
+			@state = States[:play]
+			@windows[:pause].close if @windows[:pause].visible?
+			@windows[:option].close if @windows[:option].visible?
+			
+			@windows[:p_border_up].color_to(Window::BlankColor, 7)
+		else
+			@state = States[:pause]
+			@windows[:pause].open
+			@windows[:p_border_up].color_to(Window::BorderColor, 7)
+			@windows[:msg].close if @windows[:msg].visible?
+		end
+		
+	end
+end

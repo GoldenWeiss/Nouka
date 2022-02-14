@@ -1,0 +1,61 @@
+class SceneMap
+	
+	def initialize(level_id)
+		@_level  = Noukadata::Levels[level_id]
+		@_mapID  = @_level[0]
+		@_h		 = @_level[1]
+		@_k 	 = @_level[2]
+		@_code   = @_level[3]
+		
+		@_map    = $dataMaps[@_mapID]
+		@_bitmap = SpriteMap.new(@_map)
+		@_entities = Entities.new(@_map.entities)
+		$_quadtree = Quadtree::Node.new(0, Rect.new(0, 0,
+		@_map.width * Noukadata::TileSize * Noukadata::ScaleFactor, 
+		@_map.height * Noukadata::TileSize * Noukadata::ScaleFactor))
+		$_quadtree.split
+		Mouse.showDragRect
+	end
+	
+	def update
+		@_entities.update
+		@_map.update
+		@_bitmap.update(@_h, @_k)
+		
+		mouse_event_update
+		code_update
+		
+	end
+	
+	def draw
+		@_entities.draw
+		@_bitmap.draw
+		$_quadtree.draw if $game.debug?
+	end
+	
+	def mouse_event_update
+		if Mouse.triggered?
+			if Mouse.dragged?
+				Mouse.showDragRect 
+			else
+				Mouse.hideDragRect # Reduce CPU usage
+			end
+		elsif Mouse.released?
+			if Mouse.dragged?
+				# Selected many entities
+			else
+				# Clicked
+				
+				Entities.addEntity(Entity.new(-1, 1, 0, 0, 400, 400))
+			end
+		end
+	end
+	
+	def code_update
+		eval(@_code)
+	end
+	
+	
+	
+
+end

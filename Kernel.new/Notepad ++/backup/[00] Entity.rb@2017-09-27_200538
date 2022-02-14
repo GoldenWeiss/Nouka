@@ -1,0 +1,98 @@
+class Entity
+	#--------------------------------------------------------------------------
+	# * Public Instance Variables
+	#--------------------------------------------------------------------------
+	
+	# Identity relatives
+	attr_accessor :_id        # List index
+	attr_reader   :team_id
+	attr_reader   :type_id       # 0:Player 1:Monster 2:Tower 3:Projectile 4:Object(Pannel, NPC)
+	attr_reader   :class_id      # Class ID
+	attr_reader   :variant_id    # Variant ID
+	
+	# Stats relatives
+	attr_accessor :level
+	
+	attr_accessor :base_hp                 # Entity's base    Health  Points
+	attr_accessor :base_atk                # Entity's base    Attack  Points
+	attr_accessor :base_mag                # Entity's base    Magic   Points
+	attr_accessor :base_def                # Entity's base    Defense Points
+	attr_accessor :base_magDef             # Entity's base    Mag.Def Points
+	attr_accessor :base_speed              # Entity's base    Speed   Points
+	attr_accessor :current_hp              # Entity's current Health  Points
+	attr_accessor :current_atk             # Entity's current Attack  Points
+	attr_accessor :current_mag             # Entity's current Magic   Points
+	attr_accessor :current_def             # Entity's current Defense Points
+	attr_accessor :current_magDef          # Entity's current Mag.Def Points
+	attr_accessor :current_speed           # Entity's current Speed   Points
+	
+	attr_accessor :base_detect_range       # Entity's base    Detect  Range
+	attr_accessor :base_attack_range       # Entity's base    Attack  Range
+	attr_accessor :base_volume_range       # Entity's base    Volume  Range
+	
+	attr_accessor :current_detect_range
+	attr_accessor :current_attack_range
+	attr_accessor :current_volume_range
+	
+	# Coords relatives
+	attr_accessor :map_x
+	attr_accessor :map_y
+	
+	# Sprite relatives
+	attr_accessor :sprite_z 
+	attr_accessor :sprite_name             # Entity's Bitmap Path
+	attr_accessor :sprite_mirror           # Entity's Bitmap Direction (true = , false)
+	attr_accessor :sprite_frame            # Entity's Bitmap Pattern (0, 1 , 2, 3)
+	attr_accessor :sprite_opacity          # Entity's Bitmap Opacity (0..255)
+	attr_accessor :sprite_color            # Entity's Bitmap Color
+	attr_accessor :sprite_zoom
+	attr_accessor :sprite_hovered
+	
+	# Action relative
+	attr_accessor :actions	
+	
+	# Status relatives
+	attr_accessor :status
+	
+	# Quadtree
+	attr_accessor :quadtree_node
+	#--------------------------------------------------------------------------
+	# * Object Initialization		
+	#--------------------------------------------------------------------------
+	def initialize(_id, type_id, class_id, variant_id, map_x, map_y)
+		# IDs set
+		@_id  	  = _id
+		@type_id  = type_id
+		@class_id = class_id
+		@team_id  = team_id
+		@variant_id = variant_id
+		# Coordinates
+		@map_x = map_x
+		@map_y = map_y
+		# Sprite Data
+		@sprite_name = Noukadata::Classes[type_id][class_id][1]
+		@sprite_frame = 0
+		@sprite_z = 5 # 5 to 299
+		@sprite_zoom = Noukadata::ScaleFactor
+		
+		# Ranges ~ Volume
+		@base_volume_range = current_volume_range = Rect.new(@map_x, @map_y, 16, 16)
+		
+		@moving = true
+		@move_count = 0
+	end
+	#--------------------------------------------------------------------------
+	# * Frame Update
+	#--------------------------------------------------------------------------
+	def update
+		if @moving
+			@sprite_frame = (@sprite_frame + 1) % 2
+		end
+	end
+	
+	def rect
+	
+	end
+end
+
+

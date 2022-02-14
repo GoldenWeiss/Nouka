@@ -1,0 +1,76 @@
+class SceneMap
+	def initialize(level_id)
+		@_level  = Database::Levels[level_id]
+		@_mapID  = @_level[0][0]
+		@_h		 = @_level[0][1]
+		@_k 	 = @_level[0][2]
+		@_code   = @_level[1]
+
+		@_map    = Global.maps[@_mapID]
+		@_bitmap = SpriteMap.new(@_map)
+		
+		@_quadtree = Quadtree::Node.new(1, Rect.new(0, 0,
+		@_map.width * Database::Config::TileSize * Database::Config::ZoomFactor, 
+		@_map.height * Database::Config::TileSize * Database::Config::ZoomFactor))
+
+		Input.mouse.showDragRect
+		
+		@_entities = Entities.new(@_quadtree, @_map.entities)
+	end
+	
+	def update
+		@_quadtree.clear
+		@_entities.update
+		@_map.update
+		@_bitmap.update(@_h, @_k)
+		mouse_event_update
+		code_update
+		
+	end
+	
+	def draw
+		@_entities.draw
+		@_bitmap.draw
+		@_quadtree.draw 
+	end
+	
+	def mouse_event_update
+		if Input.mouse.triggered?
+			if Input.mouse.dragged?
+				Input.mouse.showDragRect
+			else
+				Input.mouse.hideDragRect # Reduce CPU usage
+			end
+			@_entities.updateSelectedEntities
+		elsif Input.mouse.released?
+		    if Input.mouse.dragged?
+				# Selected many entities
+				#@_entities.clearSelectedEntities
+			else
+				# Clicked
+				something = false
+				if @_entities.selectedEntities?
+					@_entities.each {|e| e.moveTo(e.map_x + 30, e.map_y + 30)}
+				elsif something#if mouse on window
+				
+				else 
+					# No interference, continue action
+					_e = Entity.new(-1, 0, 1, rand(3), Input.mouse.x, Input.mouse.y)
+					@_entities.addEntity(_e)
+				end
+			end
+		end
+	end
+	
+	def clearSelectedEntities
+		@_entities.clearSelectedEntities
+	end
+	def code_update
+		eval(@_code)
+	end
+	
+	def addEntity(entity)
+		@_entities.addEntity(entity)
+		
+	end
+end

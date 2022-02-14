@@ -1,0 +1,106 @@
+______________________________________________________________<,-,>
+
+.:: Suivi ::.
+______________________________________________________________<,-,>
+<,-,>zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz<,-,>
+
+.: Cours 1 : [31 aout] :.
+[Début Projet]
+- Ajout fichiers Database.rb, main.rb et Game.rb
+______________________________________________________________<,-,>
+.: Cours 2 : [7 septembre] :.
+[Boucle principale du jeu. Chargement des cartes.]
+- Ajout des fichiers ObjectMap.rb et SceneMap.rb.
+- ObjectMap.rb : Structure d'une carte.
+- SceneMap.rb : Code principal où la carte et les événements seront affichés.
+______________________________________________________________<,-,>
+.: Cours 3 : [14 septembre] :.
+[Affichage d'une carte]
+- Ajout des fichiers SpriteMap.rb, Cache.rb et ObjectTileset.rb.
+- SpriteMap.rb : Affichage des tiles d'une map.
+- Cache.rb : Module par où les images doivent impérativement être chargées. Elles sont chargées, puis stockées pour réutilisation.
+- ObjectTileset.rb : Données de collision des tiles d'une image Tileset et petit trick pour charger les images Tileset.
+______________________________________________________________<,-,>
+.: Cours 4 : [20 septembre] :.
+[Création des événements.]
+- Ajout des fichier Entity.rb, Entities.rb et SpriteEntity.rb.
+- Entity.rb : Classe qui contient les données d'un événement. (@map_x, @map_y, @type_id, etc)
+- Entities.rb : Tableau qui stockera les événements et les mettra à jour. (@entities.each.update)
+- SpriteEntity.rb : Affichage du graphique d'un événement.
+______________________________________________________________<,-,>
+.: Cours 5 : [28 septembre] :.
+[Gestion Souris et Clavier. Implémentation du système d'arbres quaternaires.]
+- Ajout Rect.rb (classe rectangle)
+- Création du fichier Input.rb. Codage classes Input::Mouse et Input::Keyboard.
+- Création du fichier Quadtree.rb
+______________________________________________________________<,-,>
+.: Cours 6 : [4 octobre] :.
+[Esquisse déplacements événements. Réécriture du système du jeu (Game.rb).]
+- Ajout des fichiers Kernel.rb et Global.rb. 
+- Kernel.rb : Petit utilitaire pour définir des fonctions debug.
+- Global.rb : Conteneur des variables globales pour un code plus élégant.
+- Ajout d'un tableau @selected_entities dans la classe Entities pour les événements sélectionnés avec la souris sur la carte.
+- Modification mineures apportées aux structures Database.rb
+______________________________________________________________<,-,>
+.: Cours 7 : [12 octobre] :.
+[Introduction à la notion de pathfinding avec multithreading.]
+- Modifications générales apportées au code. Ajout des déplacements de la carte avec les flèches directionnelles.
+______________________________________________________________<,-,>
+.: Cours 8 : [18 octobre] :.
+[Continuation pathfinding]
+- Améliorations apportées au module souris.
+- Entretemps, gestion d'un zoom global.
+- Ajout fichier Serializable.rb.
+- Suppression Entities.rb. Entities gérées maintenant dans la classe SceneMap.
+______________________________________________________________<,-,>
+.: Cours 9 : [25 octobre] :.
+[Continuation pathfinding]
+- Petit hésitation quant à la façon de programmer le pathfinding. Je vais utiliser le case-par-case,
+mais si j'ai du temps à la fin je vais réécrire à l'aide du Quadtree.
+- Ajout du fichier PriorityQueue.rb et Ratio.rb
+______________________________________________________________<,-,>
+.: Cours 10 : [ octobre] :.
+[Conclusion]
+- Finalisation pathfinding. (Gestion collisions durant déplacements)
+- Je remarque que la classe Projectile et les collisions liés
+  au combats sont des éléments du système de combat, qui sera fait
+  dans l'étape 2.
+______________________________________________________________<,-,>
+
+.:: Constat général ::.
+______________________________________________________________<,-,>
+<,-,>zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz<,-,>
+
+.: Point 1 :. 
+Le Pathfinding est une rude épreuve. Je sais comment fonctionne l'algorithme de base,
+mais je n'étais pas sûr comment le mettre en pratique pour mon jeu.
+______________________________________________________________<,-,>
+.: Point 2 :.
+Les classes événements sont correctes, sauf qu'elles sont toutes
+contenues dans une seule classe, où la variable @type_id remplace
+la création de classes futiles :
+{GameEntityPlayer, GameEntityTower, GameEntityEvent, etc} (voir plan)
+Il restera quelques variables à ajouter/enlever
+avec le système de combat (durant étape 2).
+______________________________________________________________<,-,>
+.: Point 3 :.
+La création des classes cartes s'est déroulée conformément à mes prévisions, 
+bien qu'il faudra faire des ajustements à l'étape 3 quand je dessinerai les cartes.
+______________________________________________________________<,-,>
+
+.:: Notes ::.
+______________________________________________________________<,-,>
+<,-,>zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz<,-,>
+
+.: Point 1 :.
+Séparer les Projectiles de la classe Entity.
+Utiliser une méthode (sprite.x = (sprite.x * (vt - 1) + x) / vt) pour un mouvement diagonal.
+______________________________________________________________<,-,>
+.: Point 2 :.
+Réécrire la classe Rect en utilisant deux 'Point'.
+Nécessite réécriture de la classe Mouse o.o.
+______________________________________________________________<,-,>
+.: Point 3 :.
+Réécrire le système de pathfinding en utilisant les quadtrees.
+Utiliser des LinkedPoints. (Pour du beau code *-*.)
+______________________________________________________________<,-,>

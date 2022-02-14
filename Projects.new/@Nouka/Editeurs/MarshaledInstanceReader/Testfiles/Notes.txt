@@ -1,0 +1,1 @@
+Les objets de type Table sont une classe de base de RPG Maker, qui peuvent être lues par mir.rb

@@ -1,0 +1,17 @@
+Ce que fait "string
+v = r_entry(r_string(arg), arg);
+v = r_leave(v, arg);
+(r_string = r_bytes)
+#define r_bytes(arg) r_bytes0(r_long(arg), (arg))
+
+Ce que fait userdef
+1) apelle r_unique pour obtenir VALUE name;
+2) appel r_string pour obtenir VALUE data;
+3) PEUT ETRE OPTIONEL ? 
+if (ivp) {
+		r_ivar(data, NULL, arg);
+		*ivp = FALSE;
+	    }
+4) v = funcall('_load')
+5) v = r_entry
+6) v = r_post_proc

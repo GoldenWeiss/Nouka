@@ -1,0 +1,55 @@
+module Serializable
+	# Serializable Class
+	class Map
+		Layers = 3
+		attr_accessor :width
+		attr_accessor :height
+		attr_accessor :entities
+		attr_accessor :data
+		def initialize(level)
+			@width, @height = 40, 20
+			# Array of Basic Entities (NPC, pannel, chest, etc...)
+			@entities = []
+			
+			# Tiles Data 
+			# [@height[@width[Layers[tileset_id, tile_id, frame]]]]
+			@data = Array.new(@height) { Array.new(@width) { Array.new(Layers) {[0, 0, 0]}}}
+			# Get animated tiles (autoTiles)
+		end
+		# Frame Update
+=begin
+		def update
+			@data.each { |h|
+				h.each { |w|
+					w.each { |z|
+						if $dataTilesets[z[0]].frames > 1
+							z[2] = z[2] + 1 % 2
+						end
+					}
+				}
+			}
+		end
+=end
+		def update
+		end
+	end
+	
+	class ObjectTileset
+	attr_accessor :filename
+	attr_accessor :data
+	attr_accessor :width
+	attr_accessor :height
+	attr_reader   :frames
+	def initialize(f="", w = 0, h = 0, setsize = 1)
+		@frames = setsize
+		@filename = setsize > 1 ? (Array.new(setsize) {|i| Cache::GamePath.tileset(f + i.to_s)}) : [Cache::GamePath.tileset(f)]
+		@filename.each {|i| Cache.tileset(i) }
+		@width, @height = w, h
+		@data = Array.new(h) { Array.new(w) { [0, 0, [true, true, true, true]]}}
+	end
+	
+	def name
+	
+	end
+end
+end

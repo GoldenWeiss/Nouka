@@ -1,0 +1,33 @@
+______________________________________________________________<,-,>
+
+.:: Suivi ::.
+______________________________________________________________<,-,>
+<,-,>zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz<,-,>
+
+.: Cours 1 : [11 novembre] :.
+[Début Projet]
+- Ajout fichiers GameWindow.rb. Début définition classe fenêtre.
+______________________________________________________________<,-,>
+.: Cours 2 : [14 novembre] :.
+[Finalisation classe Window]
+- Ajout fichiers GameWindowMessage.rb et AnimatedWindow.rb
+______________________________________________________________<,-,>
+.: Cours 11 : [6 févrirer] :.
+[Finalisation]
+- Modification de quelques scripts pour faciliter l'éxécution du jeu
+- Ajout d'un écran titre
+______________________________________________________________<,-,>
+
+.:: Constat général ::.
+______________________________________________________________<,-,>
+<,-,>zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz<,-,>
+
+.: Point 1 :. 
+Les classes fenêtres m'ont pris tout mon temps. Par conséquent,
+je n'ai pas pu travailler sur le systeme de combat, qui sera développé
+durant l'étape 3.
+______________________________________________________________<,-,>
+.: Point 2 :.
+Abandon de la programmation d'un logiciel pour créer les cartes.
+J'utiliserai le logiciel Tiled à la place.
+______________________________________________________________<,-,>

@@ -1,0 +1,22 @@
+class GameWindowMessage < GameWindow
+	@@_w = 640
+	@@_h = 180
+	@@_x = Database::Config::DefaultWidth / 2 - @@_w / 2
+	@@_y = Database::Config::DefaultHeight - (@@_h + 20)
+
+	def initialize
+		super
+		@frame = 0
+		@max_frame = 1
+		self.set_dimensions(@@_x, @@_y, @@_w, @@_h)
+	end
+	def update
+		(@frame += 1) % @max_frame
+	end
+	def draw
+		super
+	end
+	def send_text
+	
+	end
+end

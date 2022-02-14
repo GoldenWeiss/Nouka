@@ -1,0 +1,222 @@
+*22/2/11 version 0.3.5
+* added :source, :dest, :source_with_alpha, :dest_with_alpha options to
+	:alpha_blend
+* added live.rb (repl image editor)
+* added alone.rb (run texplay image manip independent from gosu)
+	
+*1/11/10 version 0.3.0
+* pushed gems
+* tested
+*1/10/10
+version 0.2.983pre2
+* added Window#to_texture(...)  seems to be broken! releasing pre2 so
+* others can test it :)
+	
+*27/9/10
+version 0.2.983pre1
+* added Window#to_blob(x,y,width,height), grab a screenshot region
+	
+*24/9/10
+version 0.2.982pre1
+* added :default drawing mode (equivalent to :mode => nil)
+* changed Linux texture size to 512
+	
+16/8/10
+version 0.2.981
+* oops, added :caching => false to TexPlay#dup
+* oops, put 'self' inside the capture block for TexPlay#clear
+* got rid of tolerance member from rgba struct, as tolerance is now stored
+	separately
+	
+	
+16/8/10
+version 0.2.980
+* added :caching option to TexPlay.set_options, and Gosu::Image.new. For
+	control over whether images are cached or not. (accepts true and
+	false values)
+* TexPlay.create_image() no longer calls refresh_cache
+* added new TexPlay#clear() method, just draws a filled rect over image.
+	
+14/8/10
+version 0.2.975
+* fixed :tolerance bug (was in special_cmp_color_with_tolerance, was checking color1.alpha <= tolerance instead of color2.alpha <= tolerance)
+* modified TexPlay.create_image() so it only draws a colored, filled rect if a :color parameter is specified
+
+14/8/10
+version 0.2.970
+* fixed :transparent bug (bug was in rb_convert_rb_color_to_rgba(), :transparent was being matched as
+  not_a_color)
+* limited not_a_color() to match just color.red == -1 && color.green == -1, etc rather than color.red < 0
+* Now we can use negative values to define other pseudo-colors (in similar vein to :transparent)
+
+16/7/10 
+version 0.2.965
+* fixed MAX_TEXTURE_SIZE at 1024 for linux (to avoid segfault)
+
+4/7/10
+version 0.2.960
+* added :transparent pseudo-color
+* added :tolerance option (applies to :trace and :source_select etc
+	family)
+* fixed memleak in to_blob
+
+10/6/10
+version 0.2.950
+* fixed bug in apply_drawing_mode, wasn't using blended_pixel as source_pixel
+* hex literal colors now accepted, e.g 0xffff0000 (red)	
+	
+9/6/10
+version 0.2.940
+* hopefully fixed :trace behaviour. Should now return nil for color when
+pixel out of bounds.
+	
+9/6/10
+version 0.2.930
+* not_a_color now returns true when color channel < 0
+
+8/6/10
+version 0.2.920
+* :trace now supports :color_mode => :gosu
+
+7/6/10
+version 0.2.910
+* 1.8.7 incompatibility fixed
+	
+7/6/10
+version 0.2.900
+* added source_select, source_ignore, dest_select, dest_ignore
+* :chroma_key now deprecated (by above functionality)
+* using Gosu::MAX_TEXTURE_SIZE, hopefully fixes crashes on some linux
+	distros
+* Gosu::Color objects now accepted (and optionally returned by get_pixel)
+* Monkey patched Gosu::Image.from_text() for auto-caching
+* bitwise drawing modes no longer affect alpha
+* rows and columns methods added to Gosu::Image, allowed Gosu::Image to be
+	reopened by Gosu::Image.new (works with Gosu::Image#to_blob)
+
+
+23/03/10
+version 0.2.800
+* added 28 drawing modes (using :mode option)
+* added linear interpolation (:lerp)
+* added 'trace' option to line for efficient pixel-based collision detection
+	
+12/03/10
+version 0.2.721	
+* fixed bug in alpha_blend (now blends alpha channels too)
+
+6/12/09
+version 0.2.710
+* fixed bug in line drawing code (wasn't drawing final pixel)
+* fixed bug in filled rect code (wasn't drawing final row)
+* fixed bug in flood fill (wasn't drawing on first column)
+* added glDisable(GL_TEXTURE_2D) calls to cache.c, and removed 'restore previous texture binding' (i doubt there is any previous binding to restore)
+* using version.rb to help manage versions
+
+23/11/09
+* fixed bug in texplay.rb. Replaced TexPlay::TP_MAX_QUAD_SIZE - 2 with
+just TexPlay::TP_MAX_QUAD_SIZE (the -2 is now built into the constant)
+
+16/10/09
+version 0.2.700
+* removed memory leak from Gosu::Image#to_blob, now writing directly to RSTRING_PTR
+
+12/10/09
+version 0.2.666
+* added Gosu::Image#to_blob
+* to_blob functionality enables Gosu::Images to work with DevIL library
+
+6/10/09
+version 0.2.5
+* fixed quad_draw flicker bug
+* added splice_and_scale (to texplay-contrib.rb)
+* now using rake-compiler to run build process
+
+15/9/09
+version 0.2.4
+* added lsystem
+* made lsystem both 1.9.1 and 1.8.6 compatible
+
+11/9/09
+version 0.2.3
+* added Ruby 1.8.7 compatibility by modifying extconf.rb to define RUBY_19 macro
+* and modified compat.h to get rid of feature test (fails on 1.8.7)
+
+8/9/09
+version 0.2.2
+* fixed color_control bug, action_struct->color was being overwritten (now using a temp).
+* fixed faulty error msg where max tex size was being displayed as 1024 but is actually 1022
+* added :start_angle parameter to ngon action
+* fixed example screen height from 769 to 768
+* arity of -1 and 0 now supported for color_control procs
+* fixed parameter checks for circle and ngon
+* updated documentation to reflect changes, and added details on caching
+
+2/9/09
+version 0.2.1
+* releasing a gem for TexPlay
+* bumped version number so can add add gosu 0.7.14 dependency to github gem
+* hopefully gem works on both github and rubyforge
+31/8/09
+version 0.2.0
+* added each iterator
+* added alternative to proc for :color_control proc (allowing static linear transforms to pixels)
+* no longer segfaulting on windows (no idea why not)
+* rewrote EmptyImageStub in ruby, using philomory's code. now alot faster.
+* implemented 'shadow' in terms of static :color_control pixel transform
+* added more example code demonstrating each iterator (example_each.rb) and new color_control behaviour
+  i.e example_color_transform.rb
+* should be relatively stable now! 
+
+28/8/09
+version 0.1.9.1 (still BETA)
+* experimental features: Gosu::Image#dup and Gosu::Image#clone
+* also TexPlay::create_blank_image(window, width, height)
+* I noticed these features SEG FAULT on my setup in windows, so be warned
+* This is a BETA release
+
+14/8/09
+version 0.1.9.0 (BETA)
+* major rewrite. TP now supports beziers, polylines, polygons, and more
+* also supports alpha_blending (though still tempermental)
+* This is a BETA release
+
+1/7/09
+version 0.1.6.2
+* fixed another subtle bug in constrain_local_boundaries(). Function was 
+unable to deal with drawing actions that were 100% outside the image 
+boundaries.
+
+28/6/09
+version 0.1.6
+* gen_eval now working as a replacement for instance_eval in the #paint block. Allows for more user-friendly interface.
+* #paint can now be called without a block; if invoked this way it executes any commands in the action queue, e.g
+  @img.circle 20, 20, 40
+  @img.pixel 30, 30
+  @img.paint
+* above will function as if: @img.paint { circle 20, 20, 40; pixel 30, 30 }
+* collected 1.8.6/1.9.1 compatibility into compat.h
+
+16/6/09
+version 0.1.4.6
+* allowed arity of 0 (as well as -1) for ruby 1.9 compatibility
+
+13/6/09
+version 0.1.4.5
+* major bugfix with TexPlay#splice method (segfaut). Also added new color format parameter: color [1, 1, 0, 1] (e.g purple with full alpha).
+Also fixed subtle edge-case bug in constrain_local_boundaries().
+
+9/6/09
+version 0.1.4
+* improved error checking. should work better with later gosu releases
+
+20/2/09 
+version 0.1.1
+* rerelease of this version fixing the oversized image bug for refresh_cache (i.e images over 500 x 500
+
+version 0.1.1
+* oops, bug in leftshift/rightshift functions, fixed!
+
+version 0.1.0
+* release!
+

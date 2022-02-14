@@ -1,0 +1,16 @@
+module GameObjects
+	class Map
+		def initialize(map)
+			@map = map
+			@quadtree = Quadtree::Node.new(1, Rect.new(0, 0,
+			@_map.width * Database::Config::TileSize * Database::Config::ZoomFactor, 
+			@_map.height * Database::Config::TileSize * Database::Config::ZoomFactor))
+		end
+		def width
+			return @map.width
+		end
+		def height
+			return @map.height
+		end
+	end
+end
